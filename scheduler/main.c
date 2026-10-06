@@ -25,9 +25,16 @@ uint64_t get_time_ms(void) {
 }
 
 void task_register(const char *name, uint32_t period_ms, uint32_t max_runs, void (*func)(void)) {
-    // TODO
-    // register a task
-    // !!! Check max tasks
+    if (task_count < MAX_TASKS) {
+        tasks[task_count++] = (task_t){
+            .name = name,
+            .period_ms = period_ms,
+            .max_runs = max_runs,
+            .last_run_ms = 0,
+            .run_count = 0,
+            func
+        };
+    }
 }
 
 void task_1_handler(void) {
