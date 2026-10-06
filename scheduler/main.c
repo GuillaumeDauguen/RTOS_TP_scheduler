@@ -32,7 +32,7 @@ void task_register(const char *name, uint32_t period_ms, uint32_t max_runs, void
             .max_runs = max_runs,
             .last_run_ms = 0,
             .run_count = 0,
-            func
+            .func = func
         };
     }
 }
@@ -57,10 +57,11 @@ int main(void) {
             if (tasks[i].run_count < tasks[i].max_runs) {
                 l_alldone = 0;
                 uint64_t l_time = get_time_ms();
-                if (l_time > tasks[i].last_run_ms + tasks[i].period_ms) {
-                    printf("Task \"%s\" executed, run: %d, dT: %ldms\n",
+                if (l_time >= tasks[i].last_run_ms + tasks[i].period_ms) {
+                    printf("Task \"%s\" executed, run: %d/%d, dT: %ldms\n",
                         tasks[i].name,
                         tasks[i].run_count + 1,
+                        tasks[i].max_runs,
                         l_time - tasks[i].last_run_ms
                     );
                     tasks[i].last_run_ms = l_time;
