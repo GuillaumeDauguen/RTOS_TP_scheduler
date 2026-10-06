@@ -55,6 +55,11 @@ int main(void) {
             if (tasks[i].run_count < tasks[i].max_runs) {
                 uint64_t l_time = get_time_ms();
                 if (l_time > tasks[i].last_run_ms + tasks[i].period_ms) {
+                    printf("Task \"%s\" executed, run: %d, dT: %ld\n",
+                        tasks[i].name,
+                        tasks[i].run_count + 1,
+                        l_time - tasks[i].last_run_ms
+                    );
                     tasks[i].last_run_ms = l_time;
                     tasks[i].run_count++;
                     tasks[i].func();
