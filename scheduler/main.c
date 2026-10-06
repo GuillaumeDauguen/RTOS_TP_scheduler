@@ -50,12 +50,15 @@ int main(void) {
     task_register("LoggerTask", 500, 2, task_2_handler); // Runs 2 time
 
     int i = 0;
+    int l_alldone = 0;
     while (true) {
+        l_alldone = 1;
         for (i = 0; i < task_count; i++) {
             if (tasks[i].run_count < tasks[i].max_runs) {
+                l_alldone = 0;
                 uint64_t l_time = get_time_ms();
                 if (l_time > tasks[i].last_run_ms + tasks[i].period_ms) {
-                    printf("Task \"%s\" executed, run: %d, dT: %ld\n",
+                    printf("Task \"%s\" executed, run: %d, dT: %ldms\n",
                         tasks[i].name,
                         tasks[i].run_count + 1,
                         l_time - tasks[i].last_run_ms
@@ -66,7 +69,11 @@ int main(void) {
                 }
             }
         }
+        if (l_alldone)
+            break;
     }
+
+    printf("All Tasks executed\n");
 
     return 0;
 }
