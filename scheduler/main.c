@@ -49,8 +49,18 @@ int main(void) {
     task_register("SensorTask", 100, 12, task_1_handler); // Runs 12 times
     task_register("LoggerTask", 500, 2, task_2_handler); // Runs 2 time
 
+    int i = 0;
     while (true) {
-        // TODO: complete the loop
+        for (i = 0; i < task_count; i++) {
+            if (tasks[i].run_count < tasks[i].max_runs) {
+                uint64_t l_time = get_time_ms();
+                if (l_time > tasks[i].last_run_ms + tasks[i].period_ms) {
+                    tasks[i].last_run_ms = l_time;
+                    tasks[i].run_count++;
+                    tasks[i].func();
+                }
+            }
+        }
     }
 
     return 0;
